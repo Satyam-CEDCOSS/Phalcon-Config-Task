@@ -8,8 +8,7 @@ use Phalcon\Url;
 use Phalcon\Db\Adapter\Pdo\Mysql;
 use Phalcon\Config;
 use Phalcon\Config\ConfigFactory;
-
-$config = new Config([]);
+use Phalcon\Config\Adapter\Json;
 
 // Define some absolute path constants to aid in locating resources
 define('BASE_PATH', dirname(__DIR__));
@@ -57,25 +56,30 @@ $container->set(
 );
 
 $container->set(
+    'configs',
+    function () {
+        $fileurl = '../app/etc/configs.json';
+        return new Json($fileurl);
+    }
+);
+
+$container->set(
     'db',
     function () {
         return new Mysql($this['config']->db->toArray());
     }
 );
 
-// $container->set(
-//     'mongo',
-//     function () {
-//         $mongo = new MongoClient();
-
-//         return $mongo->selectDB('phalt');
-//     },
-//     true
-// );
+$container->set(
+    'mongo',
+    function () {
+        $mongo = new MongoClient();
+        return $mongo->selectDB('phalt');
+    },
+    true
+);
 
 $application = new Application($container);
-echo "<pre>";
-// print_r($container);die;
 
 try {
     // Handle the request

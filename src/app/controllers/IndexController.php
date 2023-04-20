@@ -13,6 +13,9 @@ class IndexController extends Controller
         echo $this->config->app->version;
         echo "<br>";
         
+        echo $this->configs->database->adapter;
+        
+        echo "<br>";
         echo "DataBase Table";
         echo "<br>";
         $sql = 'SELECT * FROM Users';
